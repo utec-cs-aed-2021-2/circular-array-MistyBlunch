@@ -6,7 +6,7 @@ tpt
 struct CircularArray {
   T *array;
   int capacity;
-  int back, front;
+  int back, front, siz;
   int next(int);
   int prev(int);
 
@@ -39,6 +39,7 @@ CircularArray<T>::CircularArray(int capacity) {
   this->array = new T[capacity];
   this->capacity = capacity;
   this->front = this->back = -1; 
+  this->siz = 0;
 }
 
 tpt
@@ -63,7 +64,13 @@ int CircularArray<T>::next(int index) {
 
 tpt
 void CircularArray<T>::push_back(T data) {
-
+  // if (is_full()) throw("Is full")
+  if(front == -1) {
+    front = next(front);
+  }
+  back = next(back);
+  array[back] = data;
+  siz++;
 }
 
 // tpt
@@ -86,25 +93,26 @@ void CircularArray<T>::push_back(T data) {
 
 // }
 
-// tpt
-// bool CircularArray<T>::is_empty() {
+tpt
+bool CircularArray<T>::is_empty() {
+  return (front == -1);
+}
 
-// }
-
-// tpt
-// int CircularArray<T>::size() {
-
-// }
+tpt
+int CircularArray<T>::size() {
+  return siz;
+}
 
 // tpt
 // void CircularArray<T>::clear() {
 
 // }
 
-// tpt
-// T &CircularArray<T>::operator[](const int) {
-
-// }
+tpt
+T &CircularArray<T>::operator[](const int index) {
+  if(index >= size() || index < 0) throw("Index out of bounds");
+  return array[index];
+}
 
 // tpt
 // void CircularArray<T>::sort() {
@@ -124,7 +132,7 @@ void CircularArray<T>::push_back(T data) {
 tpt
 string CircularArray<T>::to_string(string sep){
   string result = ""; 
-  for (int i = 0; i < size(); i++)
+  for(int i=0; i<size(); i++)
     result += std::to_string((*this)[i]) + sep;
   return result;    
 }

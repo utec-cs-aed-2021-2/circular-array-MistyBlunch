@@ -6,8 +6,10 @@ using namespace std;
 
 int main() {
     CircularArray<int>* array = new CircularArray<int>(7);
-    // ASSERT(array->is_empty() == true, "The function is_empty is not working");
+    ASSERT(array->is_empty() == true, "The function is_empty is not working");
     array->push_back(6);
+    cout << "aaaa" << endl;
+    cout << array->to_string() << endl;
     // array->push_back(3);
     // array->push_back(7);
     // array->push_back(8);
