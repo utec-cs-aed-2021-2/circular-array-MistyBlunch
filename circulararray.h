@@ -56,70 +56,70 @@ int CircularArray<T>::next(int index) {
   return (index + 1) % capacity;
 }
 
-tpt
-void CircularArray<T>::push_front(T data) {
+// tpt
+// void CircularArray<T>::push_front(T data) {
 
-}
+// }
 
 tpt
 void CircularArray<T>::push_back(T data) {
 
 }
 
-tpt
-void CircularArray<T>::insert(T data, int pos) {
+// tpt
+// void CircularArray<T>::insert(T data, int pos) {
 
-}
+// }
 
-tpt
-T CircularArray<T>::pop_front() {
+// tpt
+// T CircularArray<T>::pop_front() {
 
-}
+// }
 
-tpt
-T CircularArray<T>::pop_back() {
+// tpt
+// T CircularArray<T>::pop_back() {
 
-}
+// }
 
-tpt
-bool CircularArray<T>::is_full() {
+// tpt
+// bool CircularArray<T>::is_full() {
 
-}
+// }
 
-tpt
-bool CircularArray<T>::is_empty() {
+// tpt
+// bool CircularArray<T>::is_empty() {
 
-}
+// }
 
-tpt
-int CircularArray<T>::size() {
+// tpt
+// int CircularArray<T>::size() {
 
-}
+// }
 
-tpt
-void CircularArray<T>::clear() {
+// tpt
+// void CircularArray<T>::clear() {
 
-}
+// }
 
-tpt
-T &CircularArray<T>::operator[](const int) {
+// tpt
+// T &CircularArray<T>::operator[](const int) {
 
-}
+// }
 
-tpt
-void CircularArray<T>::sort() {
+// tpt
+// void CircularArray<T>::sort() {
 
-}
+// }
 
-tpt
-bool CircularArray<T>::is_sorted() {
+// tpt
+// bool CircularArray<T>::is_sorted() {
 
-}
+// }
 
-tpt
-void CircularArray<T>::reverse() {
+// tpt
+// void CircularArray<T>::reverse() {
 
-}
+// }
 
 tpt
 string CircularArray<T>::to_string(string sep){
