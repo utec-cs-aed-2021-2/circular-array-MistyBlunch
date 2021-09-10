@@ -57,17 +57,21 @@ int CircularArray<T>::next(int index) {
   return (index + 1) % capacity;
 }
 
-// tpt
-// void CircularArray<T>::push_front(T data) {
-
-// }
+tpt
+void CircularArray<T>::push_front(T data) {
+  for(int i=siz; i>0; i--) 
+    array[i] = array[i-1];
+  array[0] = data;
+  back = next(back);
+  siz++;
+}
 
 tpt
 void CircularArray<T>::push_back(T data) {
-  // if (is_full()) throw("Is full")
-  if(front == -1) {
+  if(is_full()) throw("Is full");
+
+  if(front == -1)
     front = next(front);
-  }
   back = next(back);
   array[back] = data;
   siz++;
@@ -88,14 +92,14 @@ void CircularArray<T>::push_back(T data) {
 
 // }
 
-// tpt
-// bool CircularArray<T>::is_full() {
-
-// }
+tpt
+bool CircularArray<T>::is_full() {
+  return next(back) == front;
+}
 
 tpt
 bool CircularArray<T>::is_empty() {
-  return (front == -1);
+  return (front == -1 && back == -1);
 }
 
 tpt
