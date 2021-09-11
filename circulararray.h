@@ -1,5 +1,9 @@
 #include <iostream>
+#include "selectionSort.h"
+#include "countingSort.h"
+
 using namespace std;
+
 #define tpt template <class T>
 
 tpt
@@ -59,9 +63,15 @@ int CircularArray<T>::next(int index) {
 
 tpt
 void CircularArray<T>::push_front(T data) {
-  for(int i=siz; i>0; i--) 
+  if(is_full()) throw("Is full");
+
+  if(is_empty())
+    front = next(front);
+
+  for(int i=size(); i>front; i--) 
     array[i] = array[i-1];
-  array[0] = data;
+
+  array[front] = data;
   back = next(back);
   siz++;
 }
@@ -70,27 +80,76 @@ tpt
 void CircularArray<T>::push_back(T data) {
   if(is_full()) throw("Is full");
 
-  if(front == -1)
+  if(is_empty()) 
     front = next(front);
+
   back = next(back);
   array[back] = data;
   siz++;
 }
 
-// tpt
-// void CircularArray<T>::insert(T data, int pos) {
+tpt
+void CircularArray<T>::insert(T data, int pos) {
+  cout << "back: " << back << " front: " << front << endl;
+  if(is_full()) throw("Is full");
+  if(pos < 0 || pos > siz) throw("Out of bounds");
+  if(pos == 0) push_front(data);
+  else if(pos == next(back)) push_back(data);
+  else {
+    T* tmp = new T[capacity];
 
-// }
+    for(int i=front; i<=size(); i++) {
+      if(i == pos) 
+        tmp[i] = data;
+      else if(i > pos)
+        tmp[i] = array[prev(i)];
+      else 
+        tmp[i] = array[i];
+      
+      cout << "tmp[i]" << tmp[i] << endl;
+    }
 
-// tpt
-// T CircularArray<T>::pop_front() {
+    array = tmp;
+    siz++;
+    back = next(back);
+  }
+}
 
-// }
+tpt
+T CircularArray<T>::pop_front() {
+  if(is_empty()) throw("Is empty");
 
-// tpt
-// T CircularArray<T>::pop_back() {
+  int tmp = array[front];
 
-// }
+  if(size() == 1) {
+    front = -1;
+    back = -1;
+  } else {
+    for(int i=front; i<size()-1; i++) {
+    array[i] = array[next(i)];
+  }
+    back = prev(back);
+  }
+  siz--;
+  return tmp;
+}
+
+tpt
+T CircularArray<T>::pop_back() {
+  if(is_empty()) throw("Is empty");
+
+  int tmp = array[back]; 
+
+  if(size() == 1) {
+    front = -1;
+    back = -1;
+  } else {
+    back = prev(back);
+  }
+
+  siz--;
+  return tmp;
+}
 
 tpt
 bool CircularArray<T>::is_full() {
@@ -107,10 +166,14 @@ int CircularArray<T>::size() {
   return siz;
 }
 
-// tpt
-// void CircularArray<T>::clear() {
-
-// }
+tpt
+void CircularArray<T>::clear() {
+  T* tmp = new T[capacity];
+  array = tmp;
+  front = -1;
+  back = -1;
+  siz = 0;
+}
 
 tpt
 T &CircularArray<T>::operator[](const int index) {
@@ -118,25 +181,41 @@ T &CircularArray<T>::operator[](const int index) {
   return array[index];
 }
 
-// tpt
-// void CircularArray<T>::sort() {
+tpt
+void CircularArray<T>::sort() {
+  if(is_empty()) throw("Is empty");
+  if(size() < 9999)
+    selectionSort(array, size());
+  else
+    countingSort(array, size());
+}
 
-// }
+tpt
+bool CircularArray<T>::is_sorted() {
+  if(is_empty()) throw("Is empty");
 
-// tpt
-// bool CircularArray<T>::is_sorted() {
+  bool sorted = true;
+  for(int i=front; i<size()-1; i++) {
+    if(array[i] > array[i+1]) sorted = false;
+  }
 
-// }
+  return sorted;
+}
 
-// tpt
-// void CircularArray<T>::reverse() {
-
-// }
+tpt
+void CircularArray<T>::reverse() {
+  if(is_empty()) throw("Is empty");
+  T* tmp = new T[capacity];
+  for(int i=size()-1, j=0; i>=0; i--, j++) {
+    tmp[j] = array[i];
+  }
+  array = tmp;
+}
 
 tpt
 string CircularArray<T>::to_string(string sep){
   string result = ""; 
-  for(int i=0; i<size(); i++)
+  for(int i=front; i<size(); i++)
     result += std::to_string((*this)[i]) + sep;
   return result;    
 }
