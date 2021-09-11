@@ -27,6 +27,9 @@ int main() {
     ASSERT(array->to_string() == "2 3 4 7 8 10 15 ", "The function sort is not working");
     array->reverse();
     ASSERT(array->to_string() == "15 10 8 7 4 3 2 ", "The function reverse is not working");
+    // array->insert(100,6);
+    // cout << "##############" << endl;
+    // cout << array->to_string() << endl;
     delete array;
     return 0;
 }
