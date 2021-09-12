@@ -29,19 +29,6 @@ int main() {
   ASSERT(array->to_string() == "2 3 4 7 8 10 15 ", "The function sort is not working");
   array->reverse();
   ASSERT(array->to_string() == "15 10 8 7 4 3 2 ", "The function reverse is not working");
-  // array->insert(100,6);
-  // cout << "##############" << endl;
-  // cout << array->to_string() << endl;
   delete array;
-
-  QueueArray<int>* queue = new QueueArray<int>(7);
-  queue->callme();
-  queue->enqueue(1);
-  queue->enqueue(2);
-  queue->enqueue(3);
-  cout << "##############\n" << queue->to_string() << endl;
-  queue->dequeue();
-  cout << "##############\n" << queue->to_string() << endl;
-  cout << "############## peek\n" << queue->peek() << endl;
   return 0;
 }

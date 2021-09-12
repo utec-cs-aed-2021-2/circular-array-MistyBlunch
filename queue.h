@@ -1,6 +1,5 @@
 #pragma once
 #include <exception>
-#include <iostream>
 #include "circulararray.h"
 
 #define tpt template <typename T>
@@ -11,7 +10,6 @@ class QueueArray : public CircularArray<T> {
   QueueArray();
   QueueArray(int capacity);
 
-  void callme();
   void enqueue(T item);
   T dequeue();
   T peek();
@@ -31,18 +29,13 @@ QueueArray<T>::QueueArray(int capacity) {
 }
 
 tpt
-void QueueArray<T>::callme() {
-  cout << "QueueArray" << endl;
-}
-
-tpt
 void QueueArray<T>::enqueue(T item) {
   QueueArray<T>::push_back(item);
 }
 
 tpt
 T QueueArray<T>::dequeue() {
-  QueueArray<T>::pop_front(); 
+  return QueueArray<T>::pop_front(); 
 }
 
 tpt
