@@ -1,5 +1,4 @@
-#ifndef SELECTION_SORT_H
-#define SELECTION_SORT_H
+#pragma once
 
 #include <iostream>
 using namespace std;
@@ -33,5 +32,3 @@ void selectionSort(T *arr, int size) {
     swapp(arr[i], arr[id_selected]);
   }
 }
-
-#endif

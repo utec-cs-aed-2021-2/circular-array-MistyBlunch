@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <exception>
 #include "selectionSort.h"
@@ -8,30 +9,32 @@ using namespace std;
 #define tpt template <typename T>
 
 tpt
-struct CircularArray {
-  T *array;
-  int capacity;
-  int back, front, siz;
-  int next(int);
-  int prev(int);
+class CircularArray {
+  protected:
+    T *array;
+    int capacity;
+    int back, front, siz;
+    int next(int);
+    int prev(int);
 
-  CircularArray();
-  CircularArray(int capacity);
-  virtual ~CircularArray();
-  void push_front(T data);
-  void push_back(T data);
-  void insert(T data, int pos);
-  T pop_front();
-  T pop_back();
-  bool is_full();
-  bool is_empty();
-  int size();
-  void clear();
-  T &operator[](const int);
-  void sort();
-  bool is_sorted();
-  void reverse();
-  string to_string(string sep=" ");
+  public:
+    CircularArray();
+    CircularArray(int capacity);
+    virtual ~CircularArray();
+    void push_front(T data);
+    void push_back(T data);
+    void insert(T data, int pos);
+    T pop_front();
+    T pop_back();
+    bool is_full();
+    bool is_empty();
+    int size();
+    void clear();
+    T &operator[](const int);
+    void sort();
+    bool is_sorted();
+    void reverse();
+    string to_string(string sep=" ");
 };
 
 tpt

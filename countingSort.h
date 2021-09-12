@@ -1,5 +1,4 @@
-#ifndef COUNTING_SORT_H
-#define COUNTING_SORT_H
+#pragma once
 
 #include <iostream>
 
@@ -98,5 +97,3 @@ void countingSort(int *arr, int n) {
     arr[i] = output[i];
   }
 }
-
-#endif
