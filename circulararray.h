@@ -13,7 +13,7 @@ class CircularArray {
   protected:
     T *array;
     int capacity;
-    int back, front, siz;
+    int back, front;
     int next(int);
     int prev(int);
 
@@ -46,8 +46,7 @@ tpt
 CircularArray<T>::CircularArray(int capacity) {
   this->array = new T[capacity];
   this->capacity = capacity;
-  this->front = this->back = -1; 
-  this->siz = 0;
+  this->front = this->back = -1;
 }
 
 tpt
@@ -69,83 +68,85 @@ tpt
 void CircularArray<T>::push_front(T data) {
   if(is_full()) 
     throw std::runtime_error("It's full");
-
-  if(is_empty())
-    front = next(front);
-
-  for(int i=size(); i>front; i--) 
-    array[i] = array[i-1];
-
+    
+  if(is_empty()) 
+    front = back = 0;
+  else
+    front = prev(front);
+    
   array[front] = data;
-  back = next(back);
-  siz++;
 }
 
 tpt
 void CircularArray<T>::push_back(T data) {
   if(is_full()) 
     throw std::runtime_error("It's full");
-
+    
   if(is_empty())
-    front = next(front);
-
-  back = next(back);
+    front = back = 0;
+  else
+    back = next(back);
+  
   array[back] = data;
-  siz++;
 }
 
 
 tpt
 void CircularArray<T>::insert(T data, int pos) {
+  pos--;
   if(is_full()) 
     throw std::runtime_error("It's full");
 
-  else if(pos == 0 || (is_empty() && pos == 0)) 
-    push_front(data);
-
-  else if(pos<0 || pos>siz || is_empty()) 
+  if(pos < 0 || pos > size()) 
     throw std::runtime_error("Out of bounds");
 
-  else if(pos == next(back)) 
-    push_back(data);
-
-  else {
-    T* tmp = new T[capacity];
-
-    for(int i=front; i<=size(); i++) {
-      if(i == pos) 
-        tmp[i] = data;
-      else if(i > pos)
-        tmp[i] = array[prev(i)];
-      else 
-        tmp[i] = array[i];
-      
-      cout << "tmp[i]" << tmp[i] << endl;
-    }
-
-    array = tmp;
-    siz++;
-    back = next(back);
+  if(pos == prev(front)) {
+    push_front(data);
+    return;
   }
+
+  if(pos == next(back)) {
+    push_back(data);
+    return;
+  }
+
+  if(is_empty()) {
+    front = back = pos;
+    array[pos] = data;
+  }
+
+  if(front <= back) {
+    if(back < pos || pos < front)
+      throw std::runtime_error("Out of bounds");
+  } else {
+    if(front > pos && pos > back)
+      throw std::runtime_error("Out of bounds");
+  }
+  
+  for(int i = next(back), j = back; i != prev(front); i = prev(i), j = prev(j)) {
+    if(i == pos) {
+      array[i] = data;
+      i = prev(i);
+      break;
+    }
+    array[i] = array[j];
+  }
+  back = next(back);
 }
 
 tpt
 T CircularArray<T>::pop_front() {
   if(is_empty()) 
     throw std::runtime_error("It's empty");
+  
+  T &tmp = array[front];
 
-  int tmp = array[front];
-
-  if(size() == 1) {
-    front = -1;
-    back = -1;
-  } else {
-    for(int i=front; i<size()-1; i++) {
-    array[i] = array[next(i)];
+  if(back == front) {
+    front = back = -1;
+    return tmp;
   }
-    back = prev(back);
-  }
-  siz--;
+  
+  front = next(front);
   return tmp;
 }
 
@@ -154,15 +155,14 @@ T CircularArray<T>::pop_back() {
   if(is_empty()) 
     throw std::runtime_error("It's empty");
 
-  int tmp = array[back]; 
+  T &tmp = array[back]; 
 
-  if(size() == 1) {
-    front = -1;
-    back = -1;
-  } else 
-    back = prev(back);
+  if(back == front) {
+    front = back = -1;
+    return tmp;
+  }
 
-  siz--;
+  back = prev(back);
   return tmp;
 }
 
@@ -178,33 +178,59 @@ bool CircularArray<T>::is_empty() {
 
 tpt
 int CircularArray<T>::size() {
-  return siz;
+  if(is_empty()) 
+    return 0;
+
+  if(front == back) 
+    return 1;
+
+  if(front > back)
+    return (capacity - front) + (back + 1);
+  else
+    return back - front + 1;
 }
 
 tpt
 void CircularArray<T>::clear() {
+  if(array)
+    delete [] array;
   T* tmp = new T[capacity];
   array = tmp;
   front = -1;
   back = -1;
-  siz = 0;
 }
 
 tpt
 T &CircularArray<T>::operator[](const int index) {
   if(index >= size() || index < 0) 
     throw std::runtime_error("Index out of bounds");
-  return array[index];
+
+  int tmp = front;
+    for (int i=0; i<index; i++){
+        tmp = next(tmp);
+    }
+  return array[tmp];
 }
 
 tpt
 void CircularArray<T>::sort() {
   if(is_empty()) 
     throw std::runtime_error("It's empty");
-  if(size() < 9999)
-    selectionSort(array, size());
+
+  T arr[size()];
+
+  arr[0] = array[front];
+  for(int i = next(front), j = 1; i != next(back); i = next(i), j++)
+    arr[j] = array[i];
+
+  if(size() < 100)
+    selectionSort(arr, size());
   else
-    countingSort(array, size());
+    countingSort(arr, size());
+  
+  for(int i = 0, j = front; i < size(); i++, j = next(j)) {
+    array[j] = arr[i];
+  }
 }
 
 tpt
@@ -213,8 +239,11 @@ bool CircularArray<T>::is_sorted() {
     throw std::runtime_error("It's empty");
 
   bool sorted = true;
-  for(int i=front; i<size()-1; i++) {
-    if(array[i] > array[i+1]) sorted = false;
+  for(int i = front; i != back; i = next(i)) {
+    if(array[i] > array[next(i)]) {
+      sorted = false;
+      break;
+    }
   }
 
   return sorted;
@@ -224,17 +253,24 @@ tpt
 void CircularArray<T>::reverse() {
   if(is_empty()) 
     throw std::runtime_error("It's empty");
+  
   T* tmp = new T[capacity];
-  for(int i=size()-1, j=0; i>=0; i--, j++) {
+  
+  tmp[front] = array[back];
+
+  for(int i = prev(back), j = next(front); j != next(back); i = prev(i), j = next(j)) {
     tmp[j] = array[i];
   }
+
+  delete [] array;
   array = tmp;
 }
 
 tpt
 string CircularArray<T>::to_string(string sep){
-  string result = ""; 
-  for(int i=front; i<size(); i++)
-    result += std::to_string((*this)[i]) + sep;
+  string result = "";
+  result += std::to_string(array[front]) + sep;
+  for(int i=next(front); i != next(back); i = next(i))
+    result += std::to_string(array[i]) + sep;
   return result;    
 }
