@@ -192,8 +192,7 @@ int CircularArray<T>::size() {
 
 tpt
 void CircularArray<T>::clear() {
-  if(array)
-    delete [] array;
+  delete [] array;
   T* tmp = new T[capacity];
   array = tmp;
   front = -1;
