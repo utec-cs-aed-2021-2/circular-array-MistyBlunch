@@ -1,6 +1,7 @@
 #include <iostream>
 #include "circulararray.h"
 #include "queue.h"
+#include "stack.h"
 #include "tester.h"
 
 using namespace std;
