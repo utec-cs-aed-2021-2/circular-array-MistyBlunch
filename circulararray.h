@@ -223,6 +223,7 @@ void CircularArray<T>::sort() {
     arr[j] = array[i];
 
   if(size() < 100)
+
     selectionSort(arr, size());
   else
     countingSort(arr, size());
