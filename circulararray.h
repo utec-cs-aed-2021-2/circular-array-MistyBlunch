@@ -204,11 +204,7 @@ T &CircularArray<T>::operator[](const int index) {
   if(index >= size() || index < 0) 
     throw std::runtime_error("Index out of bounds");
 
-  int tmp = front;
-    for (int i=0; i<index; i++){
-        tmp = next(tmp);
-    }
-  return array[tmp];
+  return array[(front + index) % capacity];
 }
 
 tpt
